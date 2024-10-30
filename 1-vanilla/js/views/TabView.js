@@ -1,4 +1,4 @@
-import { qs, qsAll } from "../helpers.js";
+import { delegate, qs, qsAll } from "../helpers.js";
 import View from "./View.js";
 
 export const TabType = {
@@ -16,6 +16,8 @@ export default class TabView extends View {
     super(qs("#tab-view"));
 
     this.template = new Template();
+
+    this.bindEvents();
   }
 
   show(selectedTab) {
@@ -27,15 +29,26 @@ export default class TabView extends View {
 
     super.show();
   }
+
+  bindEvents() {
+    delegate(this.element, "click", "li", (event) => this.handleClick(event));
+  }
+
+  handleClick(event) {
+    const value = event.target.dataset.tab;
+
+    this.emit("@change", { value });
+  }
 }
 
 class Template {
   getTabList() {
     return `
       <ul class="tabs">
-        ${Object.values(TabType) //
+        ${Object.values(TabType)
           .map((tabType) => ({ tabType, tabLabel: TabLabel[tabType] }))
-          .map(this._getTab)}
+          .map(this._getTab)
+          .join("")}
       </ul>
         `;
   }
@@ -45,6 +58,6 @@ class Template {
       <li data-tab="${tabType}">
         ${tabLabel}
       </li>
-    `;
+      `;
   }
 }
