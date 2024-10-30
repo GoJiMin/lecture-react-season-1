@@ -41,6 +41,7 @@ export default class SearchFormView extends View {
 
   handleReset() {
     this.emit("@reset");
+    this.showResetButton(false);
   }
 
   show(value) {
