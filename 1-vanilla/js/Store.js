@@ -20,4 +20,8 @@ export default class Store {
       product.name.includes(keyword)
     );
   }
+
+  getKeywordList() {
+    return this.storage.keywordData;
+  }
 }
